@@ -8,22 +8,25 @@ import { useNavigate } from 'react-router-dom';
 export default function Signup() {
 
 
-
+const [loading, setloading] = useState(false)
 const [errorMessage, setErrorMessage] = useState(null)
 const [success, setSuccess] = useState(false)
 let navg=useNavigate()
 
  async function RegisterApi(data){
+  setloading(true)
   let req= await axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signup`,data).then((req)=>{if(req.data.message == 'success'){
     setSuccess(true)
       setTimeout(() => {
         navg('/login')
       }, 1000);
+      setloading(false)
   }}).catch((err)=>{console.log(err.response.data.message)
     setErrorMessage(err.response.data.message)
+    setloading(false)
   }
-  )
-  console.log(req.data.response);
+  ).finally(()=>setloading(false))
+  // console.log(req.data.response);
   
   }
   let validYup=Yup.object({
@@ -50,7 +53,7 @@ let navg=useNavigate()
 <div className='my-4'>
   <h2 className='text-3xl text-center text-green-700 '>Register Now!</h2>
 {errorMessage ? <div className="p-4 mb-2 mx-auto text-sm text-red-800 rounded-lg w-6/12 bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-  <span className="font-medium">Danger alert!</span> {errorMessage}
+  <span className="font-medium">{errorMessage}</span> 
 </div>:''}
 {success ? <div className="p-4 mb-2 mx-auto text-sm text-green-800 rounded-lg w-6/12 bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
   <span className="font-medium">Congratulations</span> Success
@@ -84,7 +87,7 @@ let navg=useNavigate()
     {registerForm.touched.phone && registerForm.errors.phone ? <p className='bg-blue-200 p-2 rounded mt-1 '>{registerForm.errors.phone}</p> :""}
 
   </div>
-  <button disabled={!(registerForm.isValid && registerForm.dirty)} type="submit" className="text-white bg-active hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-active disabled:bg-opacity-25">Submit</button>
+  <button disabled={!(registerForm.isValid && registerForm.dirty)} type="submit" className="text-white bg-active hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-active disabled:bg-opacity-25"> {loading ? <i className="fa-solid fa-spinner fa-spin"></i>:'Register'}    </button>
 </form>
 </div>
 

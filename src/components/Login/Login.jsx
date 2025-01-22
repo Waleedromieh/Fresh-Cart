@@ -7,23 +7,25 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
  
-
+const [loading, setloading] = useState(false)
 const [errorMessage, setErrorMessage] = useState(null)
 const [success, setSuccess] = useState(false)
 let navg=useNavigate()
 
  async function LoginApi(data){
+  setloading(true)
   let req= await axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signin`,data).then((req)=>{if(req.data.message == 'success'){
     setSuccess(true)
       setTimeout(() => {
         navg('/')
       }, 1000);
-  }}).catch((err)=>{console.log(err.response.data.message)
-    setErrorMessage(err.response.data.message)
   }
-  )
-  console.log(req.data.response);
-  
+  setloading(false)
+}).catch((err)=>{console.log(err.response.data.message)
+    setErrorMessage(err.response.data.message)
+    setloading(false)
+  }
+  ).finally(()=>setloading(false))  
   }
   let validYup=Yup.object({
     email:Yup.string().required('email is required').email('enter Valid Email'),
@@ -62,7 +64,7 @@ let navg=useNavigate()
     {loginForm.touched.password && loginForm.errors.password ? <p className='bg-blue-200 p-2 rounded mt-1'>{loginForm.errors.password}</p> :""}
   </div>
   <Link to={'/forgetPassword'} className='block my-2'>Forget Password..?</Link>
-  <button disabled={!(loginForm.isValid && loginForm.dirty)} type="submit" className="text-white bg-active hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-active disabled:bg-opacity-25">Submit</button>
+  <button disabled={!(loginForm.isValid && loginForm.dirty)} type="submit" className="text-white bg-active hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-active disabled:bg-opacity-25">{loading ? <i className="fa-solid fa-spinner fa-spin"></i> :'Login'}</button>
 </form>
 </div>
 
