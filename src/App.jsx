@@ -11,22 +11,28 @@ import Brands from './components/Brands/Brands'
 import Category from './components/Category/Category'
 import ForgetPassword from './components/ForgetPassword/ForgetPassword'
 import UpdatePassword from './components/UpdatePassword/UpdatePassword'
+import AuthContextProvider from './Context/AuthContextProvider'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import ProductDetails from './components/ProductDetails/ProductDetails'
 
 function App() {
 let router=createBrowserRouter([{path:'',element:<Layout/>,children:[
-  {index:true,element:<Home/>},
-  {path:'product',element:<Product/>},
-  {path:'login',element:<Login/>},
+  {index:true,element:<ProtectedRoute><Home/></ProtectedRoute>},
+  {path:'product',element:<ProtectedRoute><Product/></ProtectedRoute> },
+  {path:'login',element:<Login/> },
   {path:'signup',element:<Signup/>},
-  {path:'cart',element:<Cart/>},
-  {path:'brands',element:<Brands/>},
-  {path:'category',element:<Category/>},
+  {path:'cart',element:<ProtectedRoute><Cart/></ProtectedRoute>},
+  {path:'brands',element:<ProtectedRoute><Brands/></ProtectedRoute>},
+  {path:'category',element:<ProtectedRoute><Category/></ProtectedRoute>},
+  {path:'productDetails/:id',element:<ProtectedRoute><ProductDetails/></ProtectedRoute>},
   {path:'forgetPassword',element:<ForgetPassword/>},
   {path:'updatePassword',element:<UpdatePassword/>},
   {path:'*',element:<Notfound/>},
 ]}])
   return (<>
-<RouterProvider router={router}></RouterProvider>
+  <AuthContextProvider>
+  <RouterProvider router={router}></RouterProvider>
+  </AuthContextProvider>
 </>)
 }
 

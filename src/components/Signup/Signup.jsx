@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import style from './Signup.module.css'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { authContext } from '../../Context/AuthContextProvider';
 
 export default function Signup() {
-
+let {setToken}=useContext(authContext)
 
 const [loading, setloading] = useState(false)
 const [errorMessage, setErrorMessage] = useState(null)
@@ -21,13 +22,13 @@ let navg=useNavigate()
         navg('/login')
       }, 1000);
       setloading(false)
+      localStorage.setItem('token',req.data.token)  
+      setToken(req.data.token)    
   }}).catch((err)=>{console.log(err.response.data.message)
     setErrorMessage(err.response.data.message)
     setloading(false)
   }
   ).finally(()=>setloading(false))
-  // console.log(req.data.response);
-  
   }
   let validYup=Yup.object({
     name:Yup.string().required('name is required').min(3,'minimum number of chars is 3').max(12,'maximum number of chars is 12'),
@@ -50,7 +51,7 @@ let navg=useNavigate()
     })
   return (<>
    
-<div className='my-4'>
+<div className='my-4 h-4/5 flex justify-center align-middle flex-col'>
   <h2 className='text-3xl text-center text-green-700 '>Register Now!</h2>
 {errorMessage ? <div className="p-4 mb-2 mx-auto text-sm text-red-800 rounded-lg w-6/12 bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
   <span className="font-medium">{errorMessage}</span> 
@@ -90,10 +91,5 @@ let navg=useNavigate()
   <button disabled={!(registerForm.isValid && registerForm.dirty)} type="submit" className="text-white bg-active hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 disabled:bg-active disabled:bg-opacity-25"> {loading ? <i className="fa-solid fa-spinner fa-spin"></i>:'Register'}    </button>
 </form>
 </div>
-
-
-
     </>)
-    
-  
 }

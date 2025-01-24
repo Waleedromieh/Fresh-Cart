@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import style from './Login.module.css'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { authContext } from '../../Context/AuthContextProvider';
 
 export default function Login() {
- 
+let {setToken} =useContext(authContext)
 const [loading, setloading] = useState(false)
 const [errorMessage, setErrorMessage] = useState(null)
 const [success, setSuccess] = useState(false)
@@ -21,6 +22,8 @@ let navg=useNavigate()
       }, 1000);
   }
   setloading(false)
+  localStorage.setItem('token',req.data.token)
+  setToken(req.data.token)
 }).catch((err)=>{console.log(err.response.data.message)
     setErrorMessage(err.response.data.message)
     setloading(false)
@@ -42,7 +45,7 @@ let navg=useNavigate()
     })
   return (<>
    
-<div className='my-4'>
+<div className='my-4 h-4/5 flex justify-center align-middle flex-col'>
   <h2 className='text-3xl text-center text-green-700 '>Login</h2>
 {errorMessage ? <div className="p-4 mb-2 mx-auto text-sm text-red-800 rounded-lg w-6/12 bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
   <span className="font-medium">Danger alert!</span> {errorMessage}
