@@ -13,9 +13,9 @@ const [errorMessage, setErrorMessage] = useState(null)
 const [success, setSuccess] = useState(false)
 let navg=useNavigate()
 
- async function LoginApi(data){
+  function LoginApi(data){
   setloading(true)
-  let req= await axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signin`,data).then((req)=>{if(req.data.message == 'success'){
+   axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signin`,data).then((req)=>{if(req.data.message == 'success'){
     setSuccess(true)
       setTimeout(() => {
         navg('/')

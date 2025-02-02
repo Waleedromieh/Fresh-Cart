@@ -14,7 +14,8 @@ import UpdatePassword from './components/UpdatePassword/UpdatePassword'
 import AuthContextProvider from './Context/AuthContextProvider'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import ProductDetails from './components/ProductDetails/ProductDetails'
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+let client =new QueryClient()
 function App() {
 let router=createBrowserRouter([{path:'',element:<Layout/>,children:[
   {index:true,element:<ProtectedRoute><Home/></ProtectedRoute>},
@@ -24,15 +25,18 @@ let router=createBrowserRouter([{path:'',element:<Layout/>,children:[
   {path:'cart',element:<ProtectedRoute><Cart/></ProtectedRoute>},
   {path:'brands',element:<ProtectedRoute><Brands/></ProtectedRoute>},
   {path:'category',element:<ProtectedRoute><Category/></ProtectedRoute>},
-  {path:'productDetails/:id',element:<ProtectedRoute><ProductDetails/></ProtectedRoute>},
+  {path:'productDetails/:id/:category',element:<ProtectedRoute><ProductDetails/></ProtectedRoute>},
   {path:'forgetPassword',element:<ForgetPassword/>},
   {path:'updatePassword',element:<UpdatePassword/>},
   {path:'*',element:<Notfound/>},
 ]}])
   return (<>
+  <QueryClientProvider client={client}>
   <AuthContextProvider>
   <RouterProvider router={router}></RouterProvider>
   </AuthContextProvider>
+  </QueryClientProvider>
+
 </>)
 }
 

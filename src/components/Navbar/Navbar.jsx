@@ -13,7 +13,7 @@ function logOut(){
 }
   return (<>
   
-<nav className="bg-white border-gray-200 shadow">
+<nav className="bg-white border-gray-200 fixed top-0 left-0 right-0 z-20  shadow">
         <div className="max-w-screen-xl flex flex-wrap justify-between  items-center  mx-auto p-4">
           <Link to="" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-8" alt="Logo" />

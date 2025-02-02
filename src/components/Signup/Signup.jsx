@@ -33,21 +33,22 @@ let navg=useNavigate()
   let validYup=Yup.object({
     name:Yup.string().required('name is required').min(3,'minimum number of chars is 3').max(12,'maximum number of chars is 12'),
     email:Yup.string().required('email is required').email('enter Valid Email'),
-    password:Yup.string().required('password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/),
+    password:Yup.string().required('password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,'ekteb sa7'),
     rePassword:Yup.string().required('please write the password').oneOf([Yup.ref('password')],'password didnt match'),
     phone:Yup.string().required('enter your phone').matches(/^(20)?01[1250][0-9]{8}$/,'enter valid phone number'),
   })
-    let initialValues={
-      name:'',
-      password:'',
-      rePassword:'',
-      email:'',
-      phone:''
-    }
+    // let initialValues=
   let registerForm= useFormik({
-      initialValues,
+      initialValues:{
+        name:'',
+        password:'',
+        rePassword:'',
+        email:'',
+        phone:''
+      },
       onSubmit:RegisterApi,
       validationSchema:validYup,
+      
     })
   return (<>
    
